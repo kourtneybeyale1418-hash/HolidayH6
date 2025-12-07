@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mrs. K's 1-Year-Old Classroom</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; color: #1a1a1a; line-height: 1.6; font-size: 16px; background: linear-gradient(180deg, #f0f8ff 0%, #fff9f0 100%); }
+        
+        /* Christmas Decorations */
+        @keyframes snowfall {
+            0% { transform: translateY(-10px) translateX(0); opacity: 1; }
+            100% { transform: translateY(100vh) translateX(50px); opacity: 0.3; }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #fff;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+            z-index: 1;
+        }
+        
+        /* Christmas banner */
+        .christmas-banner {
+            background: linear-gradient(135deg, #c41e3a 0%, #2d5016 50%, #c41e3a 100%);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        a:focus, button:focus, select:focus { outline: 3px solid #c41e3a; outline-offset: 2px; }
+        
+        .skip-link { position: absolute; top: -40px; left: 0; background: #FF6B9D; color: white; padding: 8px; }
+        .skip-link:focus { top: 0; }
+        
+        .lang-selector { position: fixed; bottom: 20px; right: 20px; z-index: 99; background: white; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); padding: 0.5rem; }
+        .lang-btn { background: #FF6B9D; color: white; border: none; padding: 0.6rem 0.9rem; border-radius: 50px; cursor: pointer; font-weight: bold; margin: 0.3rem; }
+        .lang-btn:hover { background: #FF4A7D; }
+        .lang-btn.active { background: #6BCB77; }
+        
+        nav { background: linear-gradient(135deg, #FFD93D, #6BCB77); padding: 1rem; position: sticky; top: 0; z-index: 100; }
+        nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.8rem; }
+        nav a { color: white; text-decoration: none; padding: 0.7rem 1rem; border-radius: 20px; font-weight: bold; background: rgba(255,255,255,0.2); }
+        nav a:hover { background: rgba(255,255,255,0.4); }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .hero { background: linear-gradient(135deg, #c41e3a 0%, #2d5016 50%, #fff 100%); padding: 3rem 2rem; text-align: center; color: white; position: relative; overflow: hidden; border-bottom: 5px solid #ffd700; }
+        .hero::before { content: '❄️ ⛄ 🎄 ❄️ ⛄ 🎄 ❄️ ⛄ 🎄'; position: absolute; top: 10px; left: 0; right: 0; font-size: 1.5rem; opacity: 0.3; animation: slide 20s linear infinite; }
+        @keyframes slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+        
+        .btn { background: #c41e3a; color: white; padding: 1rem 2rem; border: 3px solid #ffd700; border-radius: 30px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(196,30,58,0.4); }
+        .btn:hover { background: #a01828; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(196,30,58,0.6); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; position: relative; z-index: 2; }
+        .title { text-align: center; color: #c41e3a; font-size: 2.5rem; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(196,30,58,0.2); }
+        .title::before { content: '🎄 '; }
+        .title::after { content: ' 🎄'; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 12px rgba(196,30,58,0.2); border: 3px solid #ffd700; transition: all 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(196,30,58,0.3); border-color: #c41e3a; }
+        .card h3 { color: #c41e3a; margin-bottom: 1rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th { background: #FFD93D; padding: 1rem; text-align: left; font-weight: bold; }
+        td { background: white; padding: 1rem; border: 1px solid #e0e0e0; }
+        
+        .faq-item { background: white; padding: 1.5rem; margin-bottom: 1rem; border-radius: 12px; border: 2px solid #e0e0e0; }
+        .faq-question { color: #FF6B9D; font-weight: bold; cursor: pointer; width: 100%; text-align: left; background: none; border: none; padding: 0.5rem; font-size: 1.1rem; }
+        .faq-answer { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #FFF8E7; }
+        .faq-answer.open { display: block; }
+        
+        .link-box { background: #FFF9C4; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; }
+        .link-box h4 { color: #FF6B9D; margin-bottom: 1rem; }
+        .link-box a { display: block; color: #0066cc; text-decoration: underline; margin-bottom: 0.8rem; }
+        
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .video-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-info { padding: 1.5rem; }
+        
+        .blog-post { background: white; padding: 2.5rem; margin-bottom: 2rem; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 6px solid #6BCB77; }
+        .blog-title { color: #FF6B9D; font-size: 2rem; margin-bottom: 0.5rem; }
+        .blog-date { color: #6BCB77; font-weight: bold; }
+        
+        footer { background: linear-gradient(135deg, #FFD93D, #6BCB77); color: #1a1a1a; text-align: center; padding: 2rem; margin-top: 3rem; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .title { font-size: 1.8rem; }
+            nav a { font-size: 0.9rem; padding: 0.6rem 0.8rem; }
+            .grid { grid-template-columns: 1fr; }
+            .lang-btn { padding: 0.5rem 0.7rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="christmas-banner">
+        🎅 Happy Holidays from Mrs. K's Classroom! 🎄 Season's Greetings! ⛄
+    </div>
+    
+    <!-- Falling snowflakes -->
+    <div class="snowflake" style="left: 10%; animation-duration: 10s; animation-delay: 0s;">❄️</div>
+    <div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 2s;">❄️</div>
+    <div class="snowflake" style="left: 30%; animation-duration: 15s; animation-delay: 4s;">❄️</div>
+    <div class="snowflake" style="left: 40%; animation-duration: 11s; animation-delay: 1s;">❄️</div>
+    <div class="snowflake" style="left: 50%; animation-duration: 13s; animation-delay: 3s;">❄️</div>
+    <div class="snowflake" style="left: 60%; animation-duration: 14s; animation-delay: 5s;">❄️</div>
+    <div class="snowflake" style="left: 70%; animation-duration: 16s; animation-delay: 2s;">❄️</div>
+    <div class="snowflake" style="left: 80%; animation-duration: 12s; animation-delay: 4s;">❄️</div>
+    <div class="snowflake" style="left: 90%; animation-duration: 11s; animation-delay: 1s;">❄️</div>
+    
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+        <button class="lang-btn" onclick="setLanguage('pt')">PT</button>
+    </div>
+    
+    <nav>
+        <ul>
+            <li><a onclick="show('home')">Home</a></li>
+            <li><a onclick="show('about')">About</a></li>
+            <li><a onclick="show('schedule')">Schedule</a></li>
+            <li><a onclick="show('tools')">Tools</a></li>
+            <li><a onclick="show('assignments')">Assignments</a></li>
+            <li><a onclick="show('resources')">Resources</a></li>
+            <li><a onclick="show('blog')">News</a></li>
+            <li><a onclick="show('faq')">FAQ</a></li>
+            <li><a onclick="show('contact')">Contact</a></li>
+            <li><a onclick="show('poll')">Poll</a></li>
+            <li><a onclick="show('videos')">Videos</a></li>
+        </ul>
+    </nav>
+    
+    <main id="main">
+        <!-- HOME -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>🎄 Welcome to Mrs. K's 1-Year-Old Classroom! 🎅</h1>
+                <p>A magical, safe, and festive environment where your little ones learn and grow this holiday season!</p>
+                <button class="btn" onclick="show('about')">Meet Mrs. K 🎁</button>
+            </div>
+            <div class="container">
+                <div class="grid">
+                    <div class="card">
+                        <h3>🎁 Play & Learn</h3>
+                        <p>Safe, engaging play-based learning activities with festive holiday fun designed for curious toddlers.</p>
+                    </div>
+                    <div class="card">
+                        <h3>⛄ Whole-Child Growth</h3>
+                        <p>Academic, social-emotional, and physical development in every joyful activity.</p>
+                    </div>
+                    <div class="card">
+                        <h3>🎅 Family Involvement</h3>
+                        <p>Strong parent communication and support every step of the way through the holiday season.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ABOUT -->
+        <div id="about" class="page">
+            <div class="container">
+                <h1 class="title">About Mrs. K</h1>
+                <div class="card" style="background: linear-gradient(135deg, #fff9f0, #ffe8e8); margin-bottom: 2rem; border: 3px solid #c41e3a;">
+                    <p>"We strive to meet the needs of the whole child by providing a culturally sensitive, safe, and healthy environment - especially magical during the holiday season! 🎄"</p>
+                </div>
+                <div class="card">
+                    <h3>Meet Mrs. K 🎅</h3>
+                    <p><strong>Experience:</strong> Years of early childhood education</p>
+                    <p><strong>Fun Fact:</strong> "I love reading holiday storybooks and doing festive crafts with toddlers!"</p>
+                    <p><strong>Holiday Spirit:</strong> "Making every child's first Christmas memories special and magical! ✨"</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SCHEDULE -->
+        <div id="schedule" class="page">
+            <div class="container">
+                <h1 class="title">Daily Schedule 📅</h1>
+                <table>
+                    <tr><th>Time</th><th>Activity</th></tr>
+                    <tr><td>7:00 AM</td><td>Drop Off</td></tr>
+                    <tr><td>8:00 AM</td><td>Breakfast</td></tr>
+                    <tr><td>8:30 AM</td><td>Free Play</td></tr>
+                    <tr><td>9:00 AM</td><td>Playground</td></tr>
+                    <tr><td>11:00 AM</td><td>Lunch</td></tr>
+                    <tr><td>12:00 PM</td><td>Nap Time</td></tr>
+                    <tr><td>2:00 PM</td><td>Snack & Wake Up</td></tr>
+                    <tr><td>3:00 PM</td><td>Art Activity</td></tr>
+                    <tr><td>4:00 PM</td><td>Music</td></tr>
+                    <tr><td>5:00 PM</td><td>Free Play</td></tr>
+                    <tr><td>6:00 PM</td><td>Pickup</td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- TOOLS -->
+        <div id="tools" class="page">
+            <div class="container">
+                <h1 class="title">Classroom Tools 🛠️</h1>
+                <h2 style="color: #6BCB77; text-align: center; margin: 2rem 0;">Paper-Based Tools</h2>
+                <div class="card" style="margin-bottom: 2rem; border-left: 6px solid #FFD93D;">
+                    <h3>📚 Picture Books & Story Cards</h3>
+                    <p>Interactive books that develop language and imagination.</p>
+                    <p style="margin-top: 1rem; background: #FFF8E7; padding: 1rem; border-radius: 8px;"><strong>Purpose:</strong> Builds literacy, vocabulary, and listening skills.</p>
+                    <p style="margin-top: 0.5rem; background: #E8F5E9; padding: 1rem; border-radius: 8px;"><strong>Parent Support:</strong> Read together daily for 10-15 minutes. Point to pictures and name objects.</p>
+                </div>
+                <div class="card" style="margin-bottom: 2rem; border-left: 6px solid #FFD93D;">
+                    <h3>🎨 Art Supplies</h3>
+                    <p>Safe, washable materials for creative expression.</p>
+                    <p style="margin-top: 1rem; background: #FFF8E7; padding: 1rem; border-radius: 8px;"><strong>Purpose:</strong> Develops fine motor skills and creativity.</p>
+                    <p style="margin-top: 0.5rem; background: #E8F5E9; padding: 1rem; border-radius: 8px;"><strong>Parent Support:</strong> Set up a safe art space at home. Display artwork proudly.</p>
+                </div>
+                <div class="card" style="margin-bottom: 2rem; border-left: 6px solid #FFD93D;">
+                    <h3>🧩 Puzzles & Shape Sorters</h3>
+                    <p>Large-piece puzzles perfect for little hands.</p>
+                    <p style="margin-top: 1rem; background: #FFF8E7; padding: 1rem; border-radius: 8px;"><strong>Purpose:</strong> Teaches problem-solving and spatial awareness.</p>
+                </div>
+                <h2 style="color: #6BCB77; text-align: center; margin: 2rem 0;">Digital Tools</h2>
+                <div class="card" style="margin-bottom: 2rem; border-left: 6px solid #6FDCE3;">
+                    <h3>📧 Email Updates</h3>
+                    <p>Weekly newsletters with classroom highlights.</p>
+                    <p style="margin-top: 1rem;"><strong>Contact:</strong> krbeyale26@my.sanjuancollege.edu</p>
+                </div>
+                <div class="card" style="border-left: 6px solid #6FDCE3;">
+                    <h3>🎵 Educational Videos</h3>
+                    <p>Curated age-appropriate songs and stories for home learning.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ASSIGNMENTS -->
+        <div id="assignments" class="page">
+            <div class="container">
+                <h1 class="title">Assignments & Important Dates 📅</h1>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="text-align: center; color: #6BCB77;">November 2025</h3>
+                    <p style="margin: 1rem 0;"><strong>📸 Picture Day - November 10</strong><br>Professional photos will be taken. Dress your child in their favorite outfit!</p>
+                    <p style="margin: 1rem 0;"><strong>🍂 Fall Celebration - November 15</strong><br>Special fall-themed party with crafts and snacks.</p>
+                    <p style="margin: 1rem 0;"><strong>🎨 Art Show - November 25</strong><br>Display of student artwork. Parents welcome 3-5 PM.</p>
+                    <p style="margin: 1rem 0;"><strong>🦃 Thanksgiving Break - Nov 27-28</strong><br>Classroom closed for holiday.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RESOURCES -->
+        <div id="resources" class="page">
+            <div class="container">
+                <h1 class="title">Parent Resources 📚</h1>
+                <div class="grid">
+                    <div class="link-box">
+                        <h4>Contact Information</h4>
+                        <p>📧 krbeyale26@my.sanjuancollege.edu</p>
+                        <p>📞 555-555-5555</p>
+                        <p>🕐 Hours: 7 AM - 6 PM</p>
+                    </div>
+                    <div class="link-box">
+                        <h4>Parent Tips</h4>
+                        <p>💤 Maintain consistent schedules</p>
+                        <p>🎨 Encourage creativity at home</p>
+                        <p>🧸 Safe, guided play</p>
+                        <p>📖 Read together daily</p>
+                    </div>
+                    <div class="link-box">
+                        <h4>Helpful Links</h4>
+                        <a href="https://www.readingrockets.org/" target="_blank">Reading Rockets</a>
+                        <a href="https://www.pbs.org/parents/" target="_blank">PBS Parents</a>
+                        <a href="https://www.zerotothree.org/" target="_blank">Zero to Three</a>
+                        <a href="https://www.aap.org/" target="_blank">American Academy of Pediatrics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BLOG -->
+        <div id="blog" class="page">
+            <div class="container">
+                <h1 class="title">Classroom News & Blog 📰</h1>
+                <div class="blog-post">
+                    <h2 class="blog-title">Welcome to the Classroom 2025–2026! 🎉</h2>
+                    <p class="blog-date">📅 Posted: August 15, 2025</p>
+                    <div style="margin-top: 1.5rem; line-height: 1.8;">
+                        <p style="margin-bottom: 1rem;"><strong>Dear Families,</strong></p>
+                        <p style="margin-bottom: 1rem;">Welcome to an exciting new school year! I am absolutely thrilled to embark on this learning journey with your precious little ones.</p>
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🌟 About Our Classroom</h3>
+                        <p style="margin-bottom: 1rem;">Our 1-year-old classroom is designed to be a home away from home—a safe, nurturing space where your child can explore, discover, and grow at their own pace.</p>
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">📚 What Your Child Will Experience</h3>
+                        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Sensory Exploration:</strong> Finger painting and water play</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Language Development:</strong> Daily storytime and songs</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Social-Emotional Growth:</strong> Learning to share and express feelings</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Physical Development:</strong> Outdoor play and movement activities</li>
+                        </ul>
+                        <p style="margin-top: 2rem;"><strong>With warmth and excitement,</strong><br>Mrs. K 💕</p>
+                    </div>
+                </div>
+                
+                <div class="blog-post">
+                    <h2 class="blog-title">October Highlights: Our Little Learners Shine! ✨</h2>
+                    <p class="blog-date">📅 Posted: October 28, 2025</p>
+                    <div style="margin-top: 1.5rem; line-height: 1.8;">
+                        <p style="margin-bottom: 1rem;">What an amazing month October has been! Our classroom has been buzzing with excitement, learning, and so many precious milestones. Here are some highlights from our incredible toddlers:</p>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🎃 Fall Festival Fun</h3>
+                        <p style="margin-bottom: 1rem;">Our Fall Festival was a huge success! The children loved decorating mini pumpkins with paint and stickers. Little Emma showed incredible focus as she carefully placed each sticker, while Noah couldn't stop giggling as he squished the paint between his fingers. The sensory experience was wonderful for their development!</p>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🌟 Student Spotlight: Milestone Moments</h3>
+                        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Sophia</strong> took her first independent steps in the classroom! We all cheered and celebrated this amazing achievement.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Liam</strong> said his first two-word phrase: "More cookie!" His language development is blossoming beautifully.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Ava</strong> learned to wave goodbye and now does it every morning and afternoon with the biggest smile!</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Mason</strong> successfully completed his first puzzle all by himself. The pride on his face was priceless!</li>
+                        </ul>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🎨 Art Gallery Update</h3>
+                        <p style="margin-bottom: 1rem;">Our classroom walls are filled with beautiful autumn artwork! The children created leaf prints, handprint turkeys, and colorful fall trees. Each piece showcases their unique creativity and developing fine motor skills. Parents, please come by anytime to see your child's masterpieces displayed with pride!</p>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">📚 New Books in Our Library</h3>
+                        <p style="margin-bottom: 1rem;">We've added several new board books to our classroom library, including "Brown Bear, Brown Bear" and "The Very Hungry Caterpillar." The children are absolutely captivated during story time, and many are starting to "read" along by turning pages and pointing at pictures.</p>
+                        
+                        <div style="background: #FFF8E7; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p><strong>💡 Parent Tip of the Week:</strong></p>
+                            <p>Continue the learning at home by creating a simple "touch and feel" book using different textured materials (sandpaper, cotton, foil, fabric). This supports sensory development and fine motor skills!</p>
+                        </div>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🎉 Looking Ahead to November</h3>
+                        <p style="margin-bottom: 1rem;">We have so much to look forward to! Picture Day is coming up on November 10th, our Fall Celebration is on the 15th, and we'll be learning about gratitude and thankfulness throughout the month. Mark your calendars!</p>
+                        
+                        <p style="margin-top: 2rem;">Thank you for being such wonderful, supportive families. Your children bring joy to our classroom every single day!</p>
+                        <p style="margin-top: 1rem;"><strong>With gratitude,</strong><br>Mrs. K 🍂</p>
+                    </div>
+                </div>
+                
+                <div class="blog-post">
+                    <h2 class="blog-title">Important Announcement: Updated Health & Safety Protocols 🏥</h2>
+                    <p class="blog-date">📅 Posted: September 20, 2025</p>
+                    <div style="margin-top: 1.5rem; line-height: 1.8;">
+                        <p style="margin-bottom: 1rem;"><strong>Dear Parents and Guardians,</strong></p>
+                        
+                        <p style="margin-bottom: 1rem;">As we settle into the new school year, I wanted to share some important updates regarding our health and safety protocols to ensure the wellbeing of all our little learners.</p>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🤧 Illness Policy Reminder</h3>
+                        <p style="margin-bottom: 1rem;">To keep our classroom healthy, please keep your child home if they experience:</p>
+                        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">Fever of 100.4°F or higher (must be fever-free for 24 hours without medication before returning)</li>
+                            <li style="margin-bottom: 0.5rem;">Vomiting or diarrhea (wait 24 hours after last episode)</li>
+                            <li style="margin-bottom: 0.5rem;">Unexplained rash or contagious conditions</li>
+                            <li style="margin-bottom: 0.5rem;">Thick, colored nasal discharge with fever or behavioral changes</li>
+                        </ul>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🧼 Enhanced Cleaning Procedures</h3>
+                        <p style="margin-bottom: 1rem;">We've implemented enhanced cleaning protocols including:</p>
+                        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">Frequent sanitizing of toys, surfaces, and high-touch areas throughout the day</li>
+                            <li style="margin-bottom: 0.5rem;">Daily deep cleaning of all classroom materials</li>
+                            <li style="margin-bottom: 0.5rem;">Regular handwashing routines integrated into our daily schedule</li>
+                            <li style="margin-bottom: 0.5rem;">Air purifiers running continuously in the classroom</li>
+                        </ul>
+                        
+                        <div style="background: #FFE8E8; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #FF6B9D;">
+                            <p><strong>⚠️ Allergy Alert:</strong></p>
+                            <p>We have children with peanut and tree nut allergies in our classroom. Please ensure any snacks sent from home are nut-free. Thank you for helping us keep all children safe!</p>
+                        </div>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">💊 Medication Administration</h3>
+                        <p style="margin-bottom: 1rem;">If your child requires medication during school hours, please:</p>
+                        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">Complete a medication authorization form (available in the office)</li>
+                            <li style="margin-bottom: 0.5rem;">Provide medication in its original container with clear labeling</li>
+                            <li style="margin-bottom: 0.5rem;">Speak with me directly about timing and dosage</li>
+                        </ul>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">🌡️ Daily Health Checks</h3>
+                        <p style="margin-bottom: 1rem;">We conduct brief health observations at drop-off each morning. This helps us identify any concerns early and ensure every child is ready for a great day of learning and play.</p>
+                        
+                        <h3 style="color: #6BCB77; margin: 1.5rem 0 1rem;">📋 Emergency Contact Information</h3>
+                        <p style="margin-bottom: 1rem;">Please ensure your emergency contact information is up to date. If you've changed phone numbers, addresses, or emergency contacts, let us know immediately.</p>
+                        
+                        <div style="background: #E8F5E9; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p><strong>🙏 Thank You for Your Cooperation</strong></p>
+                            <p>Your partnership in maintaining our health and safety protocols is essential. Together, we create a safe environment where children can thrive, explore, and learn with confidence.</p>
+                        </div>
+                        
+                        <p style="margin-top: 2rem;">If you have any questions or concerns about our health and safety policies, please don't hesitate to reach out. I'm always happy to discuss these important matters with you.</p>
+                        
+                        <p style="margin-top: 1rem;"><strong>Stay healthy and happy,</strong><br>Mrs. K 💚</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CONTACT FORM -->
+        <div id="contact" class="page">
+            <div class="container">
+                <h1 class="title">Contact Mrs. K 📧</h1>
+                <div class="card" style="max-width: 700px; margin: 0 auto;">
+                    <p style="margin-bottom: 2rem; text-align: center; color: #666;">Have a question, concern, or just want to share something special? Fill out the form below and I'll get back to you as soon as possible!</p>
+                    
+                    <form id="contactForm" onsubmit="submitContact(event)">
+                        <div class="form-group">
+                            <label for="parentName">Parent/Guardian Name *</label>
+                            <input type="text" id="parentName" name="parentName" required placeholder="Enter your name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="childName">Child's Name</label>
+                            <input type="text" id="childName" name="childName" placeholder="Enter your child's name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a topic...</option>
+                                <option value="general">General Question</option>
+                                <option value="schedule">Schedule/Attendance</option>
+                                <option value="behavior">Child's Behavior/Development</option>
+                                <option value="health">Health/Medical Issue</option>
+                                <option value="pickup">Pickup/Drop-off Changes</option>
+                                <option value="compliment">Compliment/Positive Feedback</option>
+                                <option value="concern">Concern</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" required placeholder="Please share your message here..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-preference">Preferred Contact Method</label>
+                            <select id="contact-preference" name="contactPreference">
+                                <option value="email">Email</option>
+                                <option value="phone">Phone Call</option>
+                                <option value="either">Either is fine</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Send Message ✉️</button>
+                    </form>
+                    
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #f0f0f0; text-align: center;">
+                        <p><strong>Other Ways to Reach Me:</strong></p>
+                        <p style="margin-top: 1rem;">📧 Email: krbeyale26@my.sanjuancollege.edu</p>
+                        <p>📞 Phone: 555-555-5555</p>
+                        <p>🕐 Office Hours: 7:00 AM - 6:00 PM (Mon-Fri)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- POLL/SURVEY -->
+        <div id="poll" class="page">
+            <div class="container">
+                <h1 class="title">Parent Survey & Polls 📊</h1>
+                
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="color: #FF6B9D; margin-bottom: 1rem;">📅 Poll: Best Time for Parent-Teacher Conferences</h3>
+                    <p style="margin-bottom: 1.5rem;">Help us schedule our upcoming parent-teacher conferences! When works best for your family?</p>
+                    
+                    <div id="pollOptions">
+                        <label class="poll-option">
+                            <input type="radio" name="poll" value="morning" onchange="votePoll('morning')">
+                            <span>Morning (7:00 AM - 9:00 AM)</span>
+                        </label>
+                        <label class="poll-option">
+                            <input type="radio" name="poll" value="afternoon" onchange="votePoll('afternoon')">
+                            <span>Afternoon (3:00 PM - 5:00 PM)</span>
+                        </label>
+                        <label class="poll-option">
+                            <input type="radio" name="poll" value="evening" onchange="votePoll('evening')">
+                            <span>Evening (5:30 PM - 7:00 PM)</span>
+                        </label>
+                        <label class="poll-option">
+                            <input type="radio" name="poll" value="weekend" onchange="votePoll('weekend')">
+                            <span>Saturday Morning (9:00 AM - 12:00 PM)</span>
+                        </label>
+                    </div>
+                    
+                    <div id="pollResults" class="poll-results" style="display: none;">
+                        <h4 style="color: #6BCB77; margin-bottom: 1rem;">Current Results:</h4>
+                        <div class="poll-label">Morning (7:00 AM - 9:00 AM)</div>
+                        <div class="poll-bar">
+                            <div class="poll-bar-fill" id="morning-bar" style="width: 25%;">25%</div>
+                        </div>
+                        <div class="poll-label">Afternoon (3:00 PM - 5:00 PM)</div>
+                        <div class="poll-bar">
+                            <div class="poll-bar-fill" id="afternoon-bar" style="width: 35%;">35%</div>
+                        </div>
+                        <div class="poll-label">Evening (5:30 PM - 7:00 PM)</div>
+                        <div class="poll-bar">
+                            <div class="poll-bar-fill" id="evening-bar" style="width: 30%;">30%</div>
+                        </div>
+                        <div class="poll-label">Saturday Morning (9:00 AM - 12:00 PM)</div>
+                        <div class="poll-bar">
+                            <div class="poll-bar-fill" id="weekend-bar" style="width: 10%;">10%</div>
+                        </div>
+                        <p style="margin-top: 1rem; color: #666; font-style: italic;">Thank you for voting! Your feedback helps us plan better.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="color: #FF6B9D; margin-bottom: 1rem;">📝 Quick Feedback Survey</h3>
+                    <p style="margin-bottom: 1.5rem;">Your input helps us improve! Please take a moment to share your thoughts.</p>
+                    
+                    <form id="surveyForm" onsubmit="submitSurvey(event)">
+                        <div class="form-group">
+                            <label for="communication">How satisfied are you with classroom communication?</label>
+                            <select id="communication" name="communication" required>
+                                <option value="">Select...</option>
+                                <option value="5">Very Satisfied</option>
+                                <option value="4">Satisfied</option>
+                                <option value="3">Neutral</option>
+                                <option value="2">Dissatisfied</option>
+                                <option value="1">Very Dissatisfied</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="activities">Are the daily activities engaging for your child?</label>
+                            <select id="activities" name="activities" required>
+                                <option value="">Select...</option>
+                                <option value="5">Extremely Engaging</option>
+                                <option value="4">Very Engaging</option>
+                                <option value="3">Somewhat Engaging</option>
+                                <option value="2">Not Very Engaging</option>
+                                <option value="1">Not Engaging</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="safety">How confident are you in the classroom's safety measures?</label>
+                            <select id="safety" name="safety" required>
+                                <option value="">Select...</option>
+                                <option value="5">Very Confident</option>
+                                <option value="4">Confident</option>
+                                <option value="3">Somewhat Confident</option>
+                                <option value="2">Not Very Confident</option>
+                                <option value="1">Not Confident</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="suggestions">What topics would you like to see covered in future newsletters or workshops?</label>
+                            <textarea id="suggestions" name="suggestions" placeholder="Share your ideas..." style="min-height: 100px;"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonial">Would you like to share a positive experience or testimonial? (Optional)</label>
+                            <textarea id="testimonial" name="testimonial" placeholder="We'd love to hear your story..." style="min-height: 100px;"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Submit Survey 📊</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ -->
+        <div id="faq" class="page">
+            <div class="container">
+                <h1 class="title">Frequently Asked Questions ❓</h1>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What are the classroom hours? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>We are open from 7:00 AM to 6:00 PM, Monday through Friday. Drop-off begins at 7:00 AM and pickup ends at 6:00 PM.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What should I bring on the first day? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>Please bring: extra clothes (2-3 complete outfits), diapers and wipes, comfort items (blanket/stuffed animal), and a family photo for our classroom board.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">How often will I receive updates about my child? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>You'll receive a daily sheet detailing meals, naps, and activities. Weekly newsletters are sent every Friday with classroom highlights and upcoming events.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What is your food/allergy policy? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>Please inform us of any allergies immediately. All food is screened for safety, and we follow age-appropriate nutrition guidelines.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What happens during nap time? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>Children rest from 12:00 PM to 2:00 PM. We create a calm environment with soft music and individual mats. Please bring a comfort item to help.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">How do you handle separation anxiety? <span class="faq-toggle">▼</span></button>
+                    <div class="faq-answer">
+                        <p>We understand separation anxiety is normal! We recommend quick, cheerful goodbyes and maintaining consistent drop-off routines. We'll keep you updated on your child's adjustment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- VIDEOS -->
+        <div id="videos" class="page">
+            <div class="container">
+                <h1 class="title">Learning Videos 🎥</h1>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem;">Fun songs, stories, and activities for home!</p>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-wrap">
+                            <iframe src="https://www.youtube.com/embed/Oq61TxejZ5g" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>Sing Along Time 🎤</h3>
+                            <p>Fun songs for toddlers</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrap">
+                            <iframe src="https://www.youtube.com/embed/UEER3Qq19SY" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>5-Minute Craft ✂️</h3>
+                            <p>Quick craft projects</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrap">
+                            <iframe src="https://www.youtube.com/embed/hMg80RmpmJc" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>Storytime 📖</h3>
+                            <p>Engaging stories</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrap">
+                            <iframe src="https://www.youtube.com/embed/p430dZvd5aI" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>Teach Through Play 🎯</h3>
+                            <p>Learning through play</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-wrap">
+                            <iframe src="https://www.youtube.com/embed/-mk4MiirzcI" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h3>Healthy Snacks 🍎</h3>
+                            <p>Toddler-friendly snacks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>🎄 &copy; 2025 Mrs. K's 1-Year-Old Classroom 🎄</p>
+        <p>Spreading Holiday Joy & Learning! ⛄</p>
+        <p>Contact: krbeyale26@my.sanjuancollege.edu | Phone: 555-555-5555</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">🎅 Wishing all our families a Merry Christmas and Happy New Year! 🎁</p>
+    </footer>
+    
+    <script>
+        function show(pageId) {
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(page) { page.classList.remove('active'); });
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleFaq(button) {
+            var answer = button.nextElementSibling;
+            var toggle = button.querySelector('.faq-toggle');
+            answer.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+        
+        var translations = {
+            en: {
+                banner: "🎅 Happy Holidays from Mrs. K's Classroom! 🎄 Season's Greetings! ⛄",
+                welcome: "🎄 Welcome to Mrs. K's 1-Year-Old Classroom! 🎅",
+                welcomeDesc: "A magical, safe, and festive environment where your little ones learn and grow this holiday season!",
+                meetBtn: "Meet Mrs. K 🎁",
+                playLearn: "🎁 Play & Learn",
+                playDesc: "Safe, engaging play-based learning activities with festive holiday fun designed for curious toddlers.",
+                wholeChild: "⛄ Whole-Child Growth",
+                wholeDesc: "Academic, social-emotional, and physical development in every joyful activity.",
+                family: "🎅 Family Involvement",
+                familyDesc: "Strong parent communication and support every step of the way through the holiday season.",
+                aboutTitle: "About Mrs. K",
+                aboutQuote: "We strive to meet the needs of the whole child by providing a culturally sensitive, safe, and healthy environment - especially magical during the holiday season! 🎄",
+                meetMrsK: "Meet Mrs. K 🎅",
+                experience: "Experience:",
+                expDesc: "Years of early childhood education",
+                funFact: "Fun Fact:",
+                funDesc: "I love reading holiday storybooks and doing festive crafts with toddlers!",
+                holidaySpirit: "Holiday Spirit:",
+                spiritDesc: "Making every child's first Christmas memories special and magical! ✨",
+                scheduleTitle: "Daily Schedule",
+                time: "Time",
+                activity: "Activity",
+                dropoff: "Drop Off",
+                breakfast: "Breakfast",
+                freeplay: "Free Play",
+                playground: "Playground",
+                art: "Art Activity",
+                lunch: "Lunch",
+                naptime: "Nap Time",
+                snack: "Snack & Wake Up",
+                music: "Music",
+                pickup: "Pickup",
+                footerCopy: "🎄 © 2025 Mrs. K's 1-Year-Old Classroom 🎄",
+                footerJoy: "Spreading Holiday Joy & Learning! ⛄",
+                footerWish: "🎅 Wishing all our families a Merry Christmas and Happy New Year! 🎁"
+            },
+            es: {
+                banner: "🎅 ¡Felices Fiestas desde el Aula de la Sra. K! 🎄 ¡Saludos de Temporada! ⛄",
+                welcome: "🎄 ¡Bienvenido al Aula de 1 Año de la Sra. K! 🎅",
+                welcomeDesc: "¡Un ambiente mágico, seguro y festivo donde sus pequeños aprenden y crecen esta temporada navideña!",
+                meetBtn: "Conoce a la Sra. K 🎁",
+                playLearn: "🎁 Jugar y Aprender",
+                playDesc: "Actividades seguras y atractivas de aprendizaje basado en el juego con diversión festiva navideña para niños curiosos.",
+                wholeChild: "⛄ Crecimiento Integral",
+                wholeDesc: "Desarrollo académico, socioemocional y físico en cada actividad alegre.",
+                family: "🎅 Participación Familiar",
+                familyDesc: "Fuerte comunicación y apoyo entre padres en cada paso durante la temporada navideña.",
+                aboutTitle: "Acerca de la Sra. K",
+                aboutQuote: "¡Nos esforzamos por satisfacer las necesidades del niño en su totalidad proporcionando un ambiente culturalmente sensible, seguro y saludable - especialmente mágico durante la temporada navideña! 🎄",
+                meetMrsK: "Conoce a la Sra. K 🎅",
+                experience: "Experiencia:",
+                expDesc: "Años de experiencia en educación infantil",
+                funFact: "Dato Curioso:",
+                funDesc: "¡Me encanta leer libros de historias navideñas y hacer manualidades festivas con niños pequeños!",
+                holidaySpirit: "Espíritu Navideño:",
+                spiritDesc: "¡Haciendo que los primeros recuerdos navideños de cada niño sean especiales y mágicos! ✨",
+                scheduleTitle: "Horario Diario",
+                time: "Hora",
+                activity: "Actividad",
+                dropoff: "Entrega",
+                breakfast: "Desayuno",
+                freeplay: "Juego Libre",
+                playground: "Patio de Recreo",
+                art: "Actividad Artística",
+                lunch: "Almuerzo",
+                naptime: "Hora de la Siesta",
+                snack: "Merienda y Despertar",
+                music: "Música",
+                pickup: "Recogida",
+                footerCopy: "🎄 © 2025 Aula de 1 Año de la Sra. K 🎄",
+                footerJoy: "¡Difundiendo Alegría y Aprendizaje Navideño! ⛄",
+                footerWish: "🎅 ¡Deseando a todas nuestras familias una Feliz Navidad y Próspero Año Nuevo! 🎁"
+            },
+            fr: {
+                banner: "🎅 Joyeuses Fêtes de la Classe de Mme K! 🎄 Salutations de Saison! ⛄",
+                welcome: "🎄 Bienvenue à la Classe de 1 An de Mme K! 🎅",
+                welcomeDesc: "Un environnement magique, sûr et festif où vos petits apprennent et grandissent pendant cette saison des fêtes!",
+                meetBtn: "Rencontrez Mme K 🎁",
+                playLearn: "🎁 Jouer et Apprendre",
+                playDesc: "Activités d'apprentissage par le jeu sûres et attrayantes avec des festivités pour les jeunes enfants curieux.",
+                wholeChild: "⛄ Développement Global",
+                wholeDesc: "Développement académique, socio-émotionnel et physique dans chaque activité joyeuse.",
+                family: "🎅 Implication Familiale",
+                familyDesc: "Communication et soutien solides des parents à chaque étape de la saison des fêtes.",
+                aboutTitle: "À Propos de Mme K",
+                aboutQuote: "Nous nous efforçons de répondre aux besoins de l'enfant dans sa globalité en fournissant un environnement culturellement sensible, sûr et sain - particulièrement magique pendant la saison des fêtes! 🎄",
+                meetMrsK: "Rencontrez Mme K 🎅",
+                experience: "Expérience:",
+                expDesc: "Des années d'expérience dans l'éducation de la petite enfance",
+                funFact: "Fait Amusant:",
+                funDesc: "J'aime lire des histoires de vacances et faire des activités festives avec les jeunes enfants!",
+                holidaySpirit: "Esprit des Fêtes:",
+                spiritDesc: "Rendre les premiers souvenirs de Noël de chaque enfant spéciaux et magiques! ✨",
+                scheduleTitle: "Horaire Quotidien",
+                time: "Heure",
+                activity: "Activité",
+                dropoff: "Dépôt",
+                breakfast: "Petit-déjeuner",
+                freeplay: "Jeu Libre",
+                playground: "Terrain de Jeu",
+                art: "Activité Artistique",
+                lunch: "Déjeuner",
+                naptime: "Heure de la Sieste",
+                snack: "Collation et Réveil",
+                music: "Musique",
+                pickup: "Retrait",
+                footerCopy: "🎄 © 2025 Classe de 1 An de Mme K 🎄",
+                footerJoy: "Répandre la Joie et l'Apprentissage des Fêtes! ⛄",
+                footerWish: "🎅 Nous souhaitons à toutes nos familles un Joyeux Noël et une Bonne Année! 🎁"
+            },
+            pt: {
+                banner: "🎅 Boas Festas da Sala da Sra. K! 🎄 Saudações da Temporada! ⛄",
+                welcome: "🎄 Bem-vindo à Sala de 1 Ano da Sra. K! 🎅",
+                welcomeDesc: "Um ambiente mágico, seguro e festivo onde seus filhotes aprendem e crescem nesta temporada de festas!",
+                meetBtn: "Conheça a Sra. K 🎁",
+                playLearn: "🎁 Brincar e Aprender",
+                playDesc: "Atividades seguras e envolventes de aprendizagem baseada em brincadeiras com diversão festiva para crianças curiosas.",
+                wholeChild: "⛄ Crescimento Integral",
+                wholeDesc: "Desenvolvimento acadêmico, socioemocional e físico em cada atividade alegre.",
+                family: "🎅 Envolvimento Familiar",
+                familyDesc: "Comunicação forte entre pais e apoio em cada passo durante a temporada de festas.",
+                aboutTitle: "Sobre a Sra. K",
+                aboutQuote: "Nos esforçamos para atender às necessidades da criança como um todo, fornecendo um ambiente culturalmente sensível, seguro e saudável - especialmente mágico durante a temporada de festas! 🎄",
+                meetMrsK: "Conheça a Sra. K 🎅",
+                experience: "Experiência:",
+                expDesc: "Anos de experiência em educação infantil",
+                funFact: "Fato Divertido:",
+                funDesc: "Adoro ler histórias de férias e fazer atividades festivas com crianças pequenas!",
+                holidaySpirit: "Espírito Natalino:",
+                spiritDesc: "Tornando as primeiras memórias de Natal de cada criança especiais e mágicas! ✨",
+                scheduleTitle: "Cronograma Diário",
+                time: "Hora",
+                activity: "Atividade",
+                dropoff: "Entrega",
+                breakfast: "Café da Manhã",
+                freeplay: "Brincadeira Livre",
+                playground: "Parque",
+                art: "Atividade Artística",
+                lunch: "Almoço",
+                naptime: "Hora da Soneca",
+                snack: "Lanche e Acordar",
+                music: "Música",
+                pickup: "Retirada",
+                footerCopy: "🎄 © 2025 Sala de 1 Ano da Sra. K 🎄",
+                footerJoy: "Espalhando Alegria e Aprendizado Natalino! ⛄",
+                footerWish: "🎅 Desejando a todas as nossas famílias um Feliz Natal e Próspero Ano Novo! 🎁"
+            }
+        };
+        
+        var currentLang = 'en';
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            var btns = document.querySelectorAll('.lang-btn');
+            btns.forEach(function(btn) { btn.classList.remove('active'); });
+            event.target.classList.add('active');
+            
+            var t = translations[lang];
+            
+            // Update banner
+            document.querySelector('.christmas-banner').textContent = t.banner;
+            
+            // Update home page
+            document.querySelector('#home h1').textContent = t.welcome;
+            document.querySelector('#home .hero p').textContent = t.welcomeDesc;
+            document.querySelector('#home .btn').textContent = t.meetBtn;
+            document.querySelectorAll('#home .card h3')[0].textContent = t.playLearn;
+            document.querySelectorAll('#home .card p')[0].textContent = t.playDesc;
+            document.querySelectorAll('#home .card h3')[1].textContent = t.wholeChild;
+            document.querySelectorAll('#home .card p')[1].textContent = t.wholeDesc;
+            document.querySelectorAll('#home .card h3')[2].textContent = t.family;
+            document.querySelectorAll('#home .card p')[2].textContent = t.familyDesc;
+            
+            // Update about page
+            document.querySelector('#about h1').textContent = '🎄 ' + t.aboutTitle + ' 🎄';
+            document.querySelectorAll('#about .card p')[0].textContent = t.aboutQuote;
+            document.querySelectorAll('#about .card h3')[0].textContent = t.meetMrsK;
+            document.querySelectorAll('#about .card p')[1].innerHTML = '<strong>' + t.experience + '</strong> ' + t.expDesc;
+            document.querySelectorAll('#about .card p')[2].innerHTML = '<strong>' + t.funFact + '</strong> ' + t.funDesc;
+            document.querySelectorAll('#about .card p')[3].innerHTML = '<strong>' + t.holidaySpirit + '</strong> ' + t.spiritDesc;
+            
+            // Update schedule page
+            document.querySelector('#schedule h1').textContent = '🎄 ' + t.scheduleTitle + ' 🎄';
+            document.querySelectorAll('#schedule th')[0].textContent = t.time;
+            document.querySelectorAll('#schedule th')[1].textContent = t.activity;
+            document.querySelectorAll('#schedule td')[1].textContent = t.dropoff;
+            document.querySelectorAll('#schedule td')[3].textContent = t.breakfast;
+            document.querySelectorAll('#schedule td')[5].textContent = t.freeplay;
+            document.querySelectorAll('#schedule td')[7].textContent = t.playground;
+            document.querySelectorAll('#schedule td')[9].textContent = t.art;
+            document.querySelectorAll('#schedule td')[11].textContent = t.lunch;
+            document.querySelectorAll('#schedule td')[13].textContent = t.naptime;
+            document.querySelectorAll('#schedule td')[15].textContent = t.snack;
+            document.querySelectorAll('#schedule td')[17].textContent = t.art;
+            document.querySelectorAll('#schedule td')[19].textContent = t.music;
+            document.querySelectorAll('#schedule td')[21].textContent = t.freeplay;
+            document.querySelectorAll('#schedule td')[23].textContent = t.pickup;
+            
+            // Update footer
+            document.querySelectorAll('footer p')[0].textContent = t.footerCopy;
+            document.querySelectorAll('footer p')[1].textContent = t.footerJoy;
+            document.querySelectorAll('footer p')[3].textContent = t.footerWish;
+            
+            alert('✅ Language changed to: ' + lang.toUpperCase() + '\n\nMain pages have been translated!\n(Forms and blog posts remain in English)');
+        }
+        
+        function submitContact(e) {
+            e.preventDefault();
+            var form = document.getElementById('contactForm');
+            var name = form.parentName.value;
+            alert('Thank you, ' + name + '! Your message has been received. Mrs. K will respond within 24 hours.');
+            form.reset();
+        }
+        
+        function votePoll(choice) {
+            document.getElementById('pollResults').style.display = 'block';
+            alert('Thank you for voting! Your preference has been recorded.');
+        }
+        
+        function submitSurvey(e) {
+            e.preventDefault();
+            var form = document.getElementById('surveyForm');
+            alert('Thank you for your valuable feedback! Your responses help us improve our classroom every day.');
+            form.reset();
+        }
+    </script>
+</body>
+</html>
